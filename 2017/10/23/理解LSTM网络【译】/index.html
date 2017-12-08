@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="u46QTaG_Dv3OZLpOBKYtqyuiNtIdnhSG5ASKoNvGBCM" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=5.1.3" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="CNN,LSTM,RNN," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Vincent Qin" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="本文是我对大神Christopher Olah的Understanding LSTM Networks的译文。">
+<meta name="keywords" content="CNN,LSTM,RNN">
+<meta property="og:type" content="article">
+<meta property="og:title" content="理解LSTM网络【译】">
+<meta property="og:url" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/index.html">
+<meta property="og:site_name" content="Vincent Qin">
+<meta property="og:description" content="本文是我对大神Christopher Olah的Understanding LSTM Networks的译文。">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM3-chain.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/RNN-rolled.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/RNN-unrolled.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/RNN-shorttermdepdencies.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/RNN-longtermdependencies.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM3-SimpleRNN.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM3-chain.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM2-notation.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM3-C-line.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM3-gate.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM3-focus-f.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM3-focus-i.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM3-focus-C.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM3-focus-o.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM3-var-peepholes.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM3-var-tied.png">
+<meta property="og:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM3-var-GRU.png">
+<meta property="og:updated_time" content="2017-10-30T16:22:17.303Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="理解LSTM网络【译】">
+<meta name="twitter:description" content="本文是我对大神Christopher Olah的Understanding LSTM Networks的译文。">
+<meta name="twitter:image" content="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/LSTM3-chain.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"hide","offset":10,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":true,"transition":{"post_block":"bounceLeftIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/"/>
+
+
+
+
+
+  <title>理解LSTM网络【译】 | Vincent Qin</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', '97856334-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c6e58e5665d2cb4a832117302943c909";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Vincent Qin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Keep Your Curiosity</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-collections">
+          <a href="/collections" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-diamond"></i> <br />
+            
+            Collections
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guest_comments">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-send"></i> <br />
+            
+            Message Board
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Schedule
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-friends">
+          <a href="/Friends" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-address-card-o"></i> <br />
+            
+            Friends
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Qin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/qin.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Qin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">理解LSTM网络【译】</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-23T21:26:20+08:00">
+                2017-10-23
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2017-10-31T00:22:17+08:00">
+                2017-10-31
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LSTM/" itemprop="url" rel="index">
+                    <span itemprop="name">LSTM</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/23/理解LSTM网络【译】/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/10/23/理解LSTM网络【译】/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/10/23/理解LSTM网络【译】/" class="leancloud_visitors" data-flag-title="理解LSTM网络【译】">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center><img src="/2017/10/23/理解LSTM网络【译】/LSTM3-chain.png" alt="LSTM" title="LSTM"></center>
+
+<p>本文是我对大神<a href="http://colah.github.io/about.html" target="_blank" rel="external">Christopher Olah</a>的<a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/" target="_blank" rel="external">Understanding LSTM Networks</a>的译文。<br><a id="more"></a></p>
+<h2 id="循环神经网络（Recurrent-Neural-Networks）"><a href="#循环神经网络（Recurrent-Neural-Networks）" class="headerlink" title="循环神经网络（Recurrent Neural Networks）"></a>循环神经网络（Recurrent Neural Networks）</h2><p>人们并非每时每刻都在大脑一片空白时开始思考。当我们读这篇文章的时候，我们会根据之前学习的知识来理解当前你在阅读的内容。我们不是把原来的知识丢的一干二净来重新学习，我们的记忆有一定的<strong>持久性</strong>。<br>传统的神经网络做不到这些，这是它的一大缺陷。比如说，可以想象有这样一种情况，我们想知道一部电影的每一帧画面正在发生什么。使用传统的神经网络很难通过理解电影之前的画面来推断以后将要发生的事件。（传统的神经网络不能处理带有时序的样本）<br>循环神经网络（Recurrent Neural Networks）尝试解决了以上问题。这种网络是一种带有循环结构的网络，可以使得信息得以持久保持。</p>
+<center><img src="RNN-rolled.png" width="15%" rnn有循环结构=""></center>
+
+<p>上图是一个RNN模块，$A$读取输入$x_i$，同时输出$h_t$，$A$这个循环允许信息从网络的当前步骤传递到下一步骤。<br>上述过程把RNN的过程讲的有些神秘感。但是，如果我们仔细想想，这也不比一个正常的神经网络难以理解。一个RNN可以看成是多个相同网络的拷贝，每一个拷贝都会向后续网络传递信息，下图我们把RNN展开。<br><img src="RNN-unrolled.png" alt="展开RNN"><br>这种链式的特性揭示了RNN与序列和列表有关，RNN是对这些数据最自然的表达。RNN目前已经被广泛使用！在过去的几年间，RNN在很多领域都有着出色的表现：语音识别，语言建模，翻译，图像描述…推荐大家阅读大神Andrej Karpathy的博文<a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/" target="_blank" rel="external"> The Unreasonable Effectiveness of Recurrent Neural Networks</a>，来领略下RNN的诸多应用，这简直不能太棒！<br>以上的成功案例离不开使用<strong>长短期记忆</strong>（LSTM: Long Short Term Memory）网络，这是一种特殊的RNN网络并且能够应对更多任务，相比于标准的RNN网络，它具有更为出色的表现。几乎所有的RNN都是基于LSTM来实现的，接下来我们讨论下LSTM的奥义。</p>
+<h2 id="长期依赖（Long-Term-Dependencies）问题"><a href="#长期依赖（Long-Term-Dependencies）问题" class="headerlink" title="长期依赖（Long-Term Dependencies）问题"></a>长期依赖（Long-Term Dependencies）问题</h2><p>RNNs的要求之一就是它能够连接之前的信息到当前的任务之上，例如利用之前的视频帧来理解当前帧的内容。如果RNNs能够做到这一点的话，它将会超级有用。但是它真的可以吗？看情况而定。<br>有时，我们仅仅需要离当前任务最近的几个任务信息。例如，我们有一个<strong>语言模型</strong>，它的目标是根据当前已有的词语去预测接下来将要出现的词语。如果我们尝试去预测“the clouds are in the sky”中的最后一个单词，我们不需要任何更多的语料，很明显最后一个单词将会是“sky”。在这种情况下，相关信息和当前需要预测词的位置的间隔是非常小的，这时RNNs可以去利用过去的信息。<br><img src="RNN-shorttermdepdencies.png" alt="短期记忆"><br>但是也有一种情况是，我们需要更多的信息才能够做预测。例如我们的<strong>语言模型</strong>需要预测下面句子的最后一个单词“I grew up in France… I speak fluent French.”。从相邻近的几个单词可以推断最后一个单词可能是一种语言，但如果我们想要知道到底是哪种语言的话，我们需要句子最前面的一个单词“France”。这会使得相关信息以及需要预测词的位置的间隔变得很大。<br>遗憾的是，随着间隔的逐渐增大，RNNs不能够去关联有用的信息。<br><img src="RNN-longtermdependencies.png" alt="长期记忆"><br>在理论上，RNNs能够解决长期依赖的问题。人们可以通过仔细选取参数来解决这类问题。但是实际上RNNs并不能去解决这个问题。<a href="http://people.idsia.ch/~juergen/SeppHochreiter1991ThesisAdvisorSchmidhuber.pdf" target="_blank" rel="external"> Hochreiter (1991) [German] and Bengio(1994)</a>等人深入研究了该问题为何如此艰难。<br>阿弥陀佛，LSTMs并没有上述问题。</p>
+<h2 id="LSTM网络"><a href="#LSTM网络" class="headerlink" title="LSTM网络"></a>LSTM网络</h2><p>长短期记忆网络——经常被叫做“LSTM”——是RNN的这一种特殊的形式，它能够解决长期依赖的问题。LSTM是由<a href="https://www.researchgate.net/publication/13853244_Long_Short-term_Memory" target="_blank" rel="external">Hochreiter &amp; Schmidhuber (1997)</a>提出，并由很多后来者完善以及推广。LSTM能够在很多问题上取得优秀的结果，现如今被广泛引用。<br>LSTM被设计成防止长期依赖问题的发生。在实践中，LSTM的长期记忆是默认行为，而并非艰苦习得！所有的RNN都有链式重复的神经网络模块。在标准的RNN中，这些重复的模块仅仅有简单的结构，例如$tanh$层。<br><img src="LSTM3-SimpleRNN.png" alt="标准RNN中重复的简单模块"><br>当然，LSTM中也存在这样的链式结构，但是其中的重复模块就大为不同了。LSTM的重复的模块中包含4种不同的层，它们以一种特殊的结构交错着。<br><img src="LSTM3-chain.png" alt="LSTM中重复的模块中包含4种不同层"><br>看不懂，不用担心，细节即将展开。接下来，我们会一步步来讲解LSTM的网络结构。首先我们先明确几个会经常用到的表示方法。<br><img src="LSTM2-notation.png" alt=""><br>在以上的图示中，每条实线传输着整个向量，从一个节点的输出到其他节点的输入。粉红色的圆圈表示的是<strong>逐点操作</strong>，例如向量的加法，黄色的方形表示已经学习了的网络层。汇集的线表示<strong>串联</strong>，分叉的线表示<strong>复制</strong>操作，这些复制的内容流向不同的位置。</p>
+<h2 id="LSTM背后的核心技术"><a href="#LSTM背后的核心技术" class="headerlink" title="LSTM背后的核心技术"></a>LSTM背后的核心技术</h2><p>LSTM的关键技术在于细胞（cell）状态，也就是图表中最上方水平穿行的直线。细胞状态可以理解成是一种传送带。它仅仅以少量的线性相交，贯穿整个链式结构上方。信息沿着这条传动带很容易保持不变。<br><img src="LSTM3-C-line.png" alt=""><br>LSTM有一种能向细胞增加或者移除信息的能力，这种经过精心设计的结构称作<strong>门</strong>（gates）。所谓的门就是一种让信息选择性通过的方法。它是由一个$sigmoid$层和一个逐点乘法单元构成。如下图：</p>
+<center><img src="LSTM3-gate.png" width="15%" rnn有循环结构=""></center>
+
+<p>$sigmoid$层的输出是$0$-$1$之间的数字，它描述了每个部分可以有多少量能够通过。$0$代表“啥都不能通过”，$1$代表“啥都能通过”！一个LSTM有三种这样的门结构，用来保证以及控制细胞状态。</p>
+<h2 id="逐步理解LSTM"><a href="#逐步理解LSTM" class="headerlink" title="逐步理解LSTM"></a>逐步理解LSTM</h2><p>LSTM的第一步是来决定<strong>啥信息将要从细胞状态中丢弃</strong>。这个决定是由一个叫做“遗忘门”（“forget gate layer”）的$sigmoid$层来决定。它的输入是$h_{t-1}$和$x_t$，输出是一个介于$0$到$1$之间数值，给每个在状态$C_{t-1}$的数值。$1$表示“完全保留”，$0$表示“完全丢弃”。<br>让我们回到之前的的语言模型的例子中，我们还是基于以前的词语来预测后续的单词。在这样一个问题中，细胞状态可能会包含当前主语的性别信息，所以正确的<strong>介词</strong>将会被使用。当我们看到一个新的主语时，我们要遗忘掉旧的的主语。<br><img src="LSTM3-focus-f.png" alt=""></p>
+<p>下一步就是决定<strong>啥新信息将要存储在细胞状态中</strong>。这包括两个方面。第一，一个叫做“输入门层”的$sigmoid$层来决定哪些值我们要更新；第二，一个$tanh$层创造了新的候选值$\tilde{C}_t$，这个值将会加入到新的状态中去。进一步，我们要把上述两个方面结合起来来更新细胞状态。<br>在我们的语言模型中，我们想要在新的主语对应的细胞状态中加入性别信息，去代替我们遗忘掉的那个旧主语状态。<br><img src="LSTM3-focus-i.png" alt=""></p>
+<p>我们现在更新旧的细胞状态，从状态$C_{t-1}$到状态$C_{t}$。上述步骤已经详述了具体如何操作，我们现在就开始更新！<br>我们将旧的细胞状态乘以$f_t$，目的是忘记我们要忘记的旧状态。然后我们加上$i_t*\tilde{C}_t$，这就是我们创造新的候选值，这个值根据我们想要更新每个状态值的程度进行伸缩变化（这就是$i_t$的意义）。<br>在我们的语言模型中，这就是我们根据最开始确定的目标，丢弃旧主语性别以及增加新主语信息的地方。<br><img src="LSTM3-focus-C.png" alt=""></p>
+<p>最后一步我们要决定到底输出什么信息。这个输出信息会基于细胞状态，但将会是一个经过过滤后的结果。首先，我们用一个$sigmoid$层去决定细胞状态的哪一部分将会被输出。然后，我们将细胞状态通过$tanh$（将其值规范到$-1$到$1$之间）。最后我们将这个值与$sigmoid$输出相乘，这样我们仅仅输出我们想要输出的部分。<br>还是对于之前提到的语言模型，因为它只看到了一个主语，它可能会输出一个与动词相关的信息。例如，可能输出这个主语是单数还是复数，所以我们会知道紧跟的动词是何种形式。<br><img src="LSTM3-focus-o.png" alt=""><br>至此，基本的LSTM介绍完毕。</p>
+<h2 id="LSTM的变体"><a href="#LSTM的变体" class="headerlink" title="LSTM的变体"></a>LSTM的变体</h2><p>我们以上描述的均是最为普通的LSTM。但是并不是所有的LSTM都是以上那个样子。事实上，似乎每一篇涉及LSTMs的论文均对其做了细微的修改。其中的差别不大，以下列举几种LSTM的变体。</p>
+<p>其中之一就是一种特别流行的LSTM变体，它由<a href="ftp://ftp.idsia.ch/pub/juergen/TimeCount-IJCNN2000.pdf" target="_blank" rel="external"> Gers &amp; Schmidhuber (2000)</a>提出，加入一种<strong>窥视孔连接</strong>（peephole connections）的结构。这使得细胞状态可以作为门层（译者：gete layers:$sigmoid$ layers &amp; $tanh$ layer）输入。<br><img src="LSTM3-var-peepholes.png" alt=""><br>以上的图示为每个门层加入了窥视孔连接，但是也有一些论文并不是所有的门层都加。</p>
+<p>另外一种变体是加入了双遗忘门（coupled forget）以及输入门。我们同时考虑了何时遗忘以及应该加入何种新信息，而并非分别考虑。我们仅仅在我们需要就地输入信息的时候才会遗忘，同时我们仅仅在遗忘掉旧的信息的时候才会加入新的信息（译者：此时$f_t=0$，表示遗忘旧的细胞状态，同时加入新的输入$\tilde{C}_t$）。<br><img src="LSTM3-var-tied.png" alt=""></p>
+<p>另外一种改动较大的变体是门控循环单元（Gated Recurrent Unit）即GRU。这个算法由<a href="http://arxiv.org/pdf/1406.1078v3.pdf" target="_blank" rel="external">Cho,et al.(2014)</a>提出，它把遗忘门和输入门结合起来构成一个“更新门”（update gate）。与此同时，它还将细胞状态和隐含状态合并起来，当然还有一些其他变化在此不一一赘述。最终的变体比标准的LSTM简单，这使得它很受欢迎。<br><img src="LSTM3-var-GRU.png" alt=""></p>
+<p>以上均是最近比较劲爆的LSTM变体。当然也有很多其他形式的变体，如<a href="http://arxiv.org/pdf/1508.03790v2.pdf" target="_blank" rel="external">Yao,et al. (2015)</a>提出的<strong>深度门RNN</strong>（Depth Gated RNNs）。还有一些变体用完全不同的方式来解决长期依赖问题，例如<a href="http://arxiv.org/pdf/1402.3511v1.pdf" target="_blank" rel="external">Koutnik,et al.(2014)</a>提出的<strong>时钟频率驱动RNN</strong>（Clockwork RNNs ）。</p>
+<p>列举了诸多LSTM变体，那么到底哪一种变体是最好的呢？其中的差异真的很重要吗？<a href="http://arxiv.org/pdf/1503.04069.pdf" target="_blank" rel="external">Greff, et al.(2015)</a>做了一个非常棒了比较，发现这些变体几乎都是一样一样的。<a href="http://jmlr.org/proceedings/papers/v37/jozefowicz15.pdf" target="_blank" rel="external">Jozefowicz,et al.(2015)</a>测试了上万种RNN框架，发现了一些框架在特定任务上会比LSTM表现出色。（译者：没有一种算法一统江湖）</p>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>以上，我提到了人们利用RNNs得到了很多优秀的结果。在本质上说，几乎所有的RNNs都使用了LSTMs。LSTMs在诸多任务上表现优异。<br>在介绍LSTMs的过程中写了很多公式，这让它看起来很吓人。幸运的是，我们在文中通过一步步地探索，让LSTM看起来平易近人。<br>LSTMs是我们完成RNNs的重大成果。我们很自然地想：还有没有其他的重大成果？研究员们的共识是：当然有！下一个重大成果就是——<strong>注意力</strong>。这个观点是让RNNs的每一步都能够从更大的数据集中挑选信息。例如，如果你想利用RNNs去给一幅图像创造标题来描述它，这就可能会选择图像的一部分作为输入，然后根据这些输入来得到每个单词。事实上，<a href="http://arxiv.org/pdf/1502.03044v2.pdf" target="_blank" rel="external">Xu,et al.(2015)</a>就是这么做的——这可能你探究<strong>注意力</strong>这个领域的起点。还有诸多使用<strong>注意力</strong>取得的令人激动的研究结果，看起来还有更多需要探索。<br><strong>注意力</strong>并非RNN唯一令人激动的研究方向。例如，<a href="http://arxiv.org/pdf/1507.01526v1.pdf" target="_blank" rel="external">Kalchbrenner, et al. (2015)</a>提出的网格LSTM（Grid LSTMs）看似非常有前景。<a href="http://arxiv.org/pdf/1502.04623.pdf" target="_blank" rel="external">Gregor, et al.(2015)</a>，<a href="http://arxiv.org/pdf/1506.02216v3.pdf" target="_blank" rel="external">Chung, et al.(2015)</a>和<a href="http://arxiv.org/pdf/1411.7610v3.pdf" target="_blank" rel="external"> Bayer &amp; Osendorfer (2015)</a>等人的研究工作是在生成模型中使用RNNs，这些工作都看起来非常有趣。过去几年是RNNs异常火爆的时期，未来也会有更多更加有意义的成果出现。</p>
+<h2 id="致谢"><a href="#致谢" class="headerlink" title="致谢"></a>致谢</h2><p>我非常感谢那些帮助我去理解LSTMs的大佬们，同时感谢对可视化进行评论并在这篇博文提供反馈的网友们。非常感激谷歌同事们的反馈，尤其感谢<a href="http://research.google.com/pubs/OriolVinyals.html" target="_blank" rel="external">Oriol Vinyals</a>，<a href="http://research.google.com/pubs/GregCorrado.html" target="_blank" rel="external">Greg Corrado</a>，<a href="http://research.google.com/pubs/JonathonShlens.html" target="_blank" rel="external">Jon Shlens</a>，<a href="http://people.cs.umass.edu/~luke/" target="_blank" rel="external">Luke Vilnis</a>以及<a href="http://www.cs.toronto.edu/~ilya/" target="_blank" rel="external">Ilya Sutskever</a>。我也由衷感谢很多同事朋友的帮助，包括<a href="https://www.linkedin.com/pub/dario-amodei/4/493/393" target="_blank" rel="external">Dario Amodei</a>和<a href="http://cs.stanford.edu/~jsteinhardt/" target="_blank" rel="external">Jacob Steinhardt</a>。值得特别感谢还有<a href="http://www.kyunghyuncho.me/" target="_blank" rel="external">Kyunghyun Cho</a>，这哥们对图表的绘制给了我极大的帮助。<br>在写这篇博文之前，我尝试在我讲授的神经网络课程中利用两系列研讨会的时间来解释LSTMs。感谢每一位参与者，感觉大家的反馈。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat_pay.png" alt="Vincent Qin WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali_pay.png" alt="Vincent Qin Alipay"/>
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Vincent Qin
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/" title="理解LSTM网络【译】">https://www.vincentqin.tech/2017/10/23/理解LSTM网络【译】/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CNN/" rel="tag"><i class="fa fa-star"></i> CNN</a>
+          
+            <a href="/tags/LSTM/" rel="tag"><i class="fa fa-star"></i> LSTM</a>
+          
+            <a href="/tags/RNN/" rel="tag"><i class="fa fa-star"></i> RNN</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/07/CNN框架-CNN-Architectures/" rel="next" title="CNN框架(CNN Architectures)">
+                <i class="fa fa-chevron-left"></i> CNN框架(CNN Architectures)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/02/降维之PCA主成分分析原理/" rel="prev" title="降维之PCA主成分分析原理">
+                降维之PCA主成分分析原理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+    
+      
+          <div onclick="showGitalk();" id="gitalk_title" class="gitalk_title">Click Gitalk Comments</div>
+      
+      <div id="gitalk_container" style="display:none;"></div>
+    
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/qin.png"
+                alt="Vincent Qin" />
+            
+              <p class="site-author-name" itemprop="name">Vincent Qin</p>
+              <p class="site-description motion-element" itemprop="description">I like eat Tomato omelette=。=</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Vincentqyw" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:qin123yw@163.com" target="_blank" title="Email">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://coding.net/vincentqin" target="_blank" title="Coding">
+                    
+                      <i class="fa fa-fw fa-code"></i>Coding</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/273224402" target="_blank" title="Weibo">
+                    
+                      <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-battery-1"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://theme-next.iissnan.com/faqs.html" title="Hexo" target="_blank">Hexo</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://fontawesome.io/icons/" title="FontAwesome" target="_blank">FontAwesome</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#循环神经网络（Recurrent-Neural-Networks）"><span class="nav-number">1.</span> <span class="nav-text">循环神经网络（Recurrent Neural Networks）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#长期依赖（Long-Term-Dependencies）问题"><span class="nav-number">2.</span> <span class="nav-text">长期依赖（Long-Term Dependencies）问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSTM网络"><span class="nav-number">3.</span> <span class="nav-text">LSTM网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSTM背后的核心技术"><span class="nav-number">4.</span> <span class="nav-text">LSTM背后的核心技术</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逐步理解LSTM"><span class="nav-number">5.</span> <span class="nav-text">逐步理解LSTM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LSTM的变体"><span class="nav-number">6.</span> <span class="nav-text">LSTM的变体</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结论"><span class="nav-number">7.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#致谢"><span class="nav-number">8.</span> <span class="nav-text">致谢</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vincent Qin</span>
+  <span class="post-meta-divider">|</span>
+
+  <style>
+	coding:link {color:#999999; } 
+	coding:visited {color:#999999;text-decoration:none;} 
+	coding:active {color:#999999;text-decoration:none;} 
+  </style>  
+  <span>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i  class="fa fa-user"></i> 官人是第
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      位访客
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站总访问数
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      人次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+    <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        lang:'en',
+        verify: false,
+        notify: true,
+        appId: 'gW2gPJn72UA5SIcq03J1SD94-gzGzoHsz',
+        appKey: 'qRCCImMfpduRBJN8FRj8pJF4',
+        placeholder: 'Just go go',
+        avatar:'retro',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script>
+    function showGitalk(){
+        $("#gitalk_title").attr("style","display:none");
+        $("#gitalk_container").attr("style","").addClass("gitalk_container");
+
+        var gitalk = new Gitalk({
+            id: window.location.pathname,
+            clientID: 'fbf87ffe2080934209fc',
+            clientSecret: '23048ae0f682b6e34844f41d2b84d171bb7b2854',
+            repo: 'gitalk',
+            owner: 'Vincentqyw',
+            admin: ['Vincentqyw'],
+            distractionFreeMode: true,
+            body: location.href
+        });
+
+        gitalk.render('gitalk_container');
+    }
+
+    
+
+  </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("RQs4FrsjFMNDD6sbzzHlN3ei-gzGzoHsz", "LQziYhODk8GWxR5yDnx4IT0Q");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+  
+  
+
+  <!--������ƭ-->
+  <script type="text/javascript" src="/js/src/breakdown.js"></script>
+
+  <!-- ҳ������С���� -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>

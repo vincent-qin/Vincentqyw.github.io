@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next gemini" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="u46QTaG_Dv3OZLpOBKYtqyuiNtIdnhSG5ASKoNvGBCM" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/safari-pinned-tab.svg?v=5.1.3" color="#222">
+
+
+  <link rel="manifest" href="/images/manifest.json">
+
+
+  <meta name="msapplication-config" content="/images/browserconfig.xml" />
+
+
+
+  <meta name="keywords" content="CNN,CIFAR10,Deep Learning,Matlab," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Vincent Qin" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="最近对深度学习尤其着迷，是时候用万能的Matlab去践行我的DL学习之路了。之所以用Matlab，是因为Matlab真的太强大了！自从大学开始我就一直用这个神奇的软件，算是最熟悉的编程工具。加上最近mathworks公司一大波大佬的不懈努力，在今年下半年发行的R2017b版本中又加入了诸多新颖的特性，尤其在DL方面，可以发现：仅仅几条简单的代码，就能够实现复杂的功能。基于以上，我在本文列举了几个">
+<meta name="keywords" content="CNN,CIFAR10,Deep Learning,Matlab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Matlab Deep Learning学习笔记">
+<meta property="og:url" content="https://www.vincentqin.tech/2017/11/19/Matlab-Deep-Learning学习笔记/index.html">
+<meta property="og:site_name" content="Vincent Qin">
+<meta property="og:description" content="最近对深度学习尤其着迷，是时候用万能的Matlab去践行我的DL学习之路了。之所以用Matlab，是因为Matlab真的太强大了！自从大学开始我就一直用这个神奇的软件，算是最熟悉的编程工具。加上最近mathworks公司一大波大佬的不懈努力，在今年下半年发行的R2017b版本中又加入了诸多新颖的特性，尤其在DL方面，可以发现：仅仅几条简单的代码，就能够实现复杂的功能。基于以上，我在本文列举了几个">
+<meta property="og:image" content="http://oofx6tpf6.bkt.clouddn.com/cifar10-fig.jpg">
+<meta property="og:image" content="http://oofx6tpf6.bkt.clouddn.com/17-11-18/63361958.jpg">
+<meta property="og:image" content="http://oofx6tpf6.bkt.clouddn.com/weight-layer2.png">
+<meta property="og:image" content="http://oofx6tpf6.bkt.clouddn.com/weight-inf.gif">
+<meta property="og:image" content="http://oofx6tpf6.bkt.clouddn.com/cifar10-images.png">
+<meta property="og:image" content="http://oofx6tpf6.bkt.clouddn.com/cifar10-weight-layer2.png">
+<meta property="og:image" content="http://oofx6tpf6.bkt.clouddn.com/resnet34.png">
+<meta property="og:updated_time" content="2017-11-30T13:26:50.181Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Matlab Deep Learning学习笔记">
+<meta name="twitter:description" content="最近对深度学习尤其着迷，是时候用万能的Matlab去践行我的DL学习之路了。之所以用Matlab，是因为Matlab真的太强大了！自从大学开始我就一直用这个神奇的软件，算是最熟悉的编程工具。加上最近mathworks公司一大波大佬的不懈努力，在今年下半年发行的R2017b版本中又加入了诸多新颖的特性，尤其在DL方面，可以发现：仅仅几条简单的代码，就能够实现复杂的功能。基于以上，我在本文列举了几个">
+<meta name="twitter:image" content="http://oofx6tpf6.bkt.clouddn.com/cifar10-fig.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"hide","offset":10,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":false,"async":true,"transition":{"post_block":"bounceLeftIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://www.vincentqin.tech/2017/11/19/Matlab-Deep-Learning学习笔记/"/>
+
+
+
+
+
+  <title>Matlab Deep Learning学习笔记 | Vincent Qin</title>
+  
+
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', '97856334-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?c6e58e5665d2cb4a832117302943c909";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Vincent Qin</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Keep Your Curiosity</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-collections">
+          <a href="/collections" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-diamond"></i> <br />
+            
+            Collections
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-guest_comments">
+          <a href="/guestbook" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-send"></i> <br />
+            
+            Message Board
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            Schedule
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-friends">
+          <a href="/Friends" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-address-card-o"></i> <br />
+            
+            Friends
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            Search
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="Searching..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://www.vincentqin.tech/2017/11/19/Matlab-Deep-Learning学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Vincent Qin">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/qin.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Vincent Qin">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Matlab Deep Learning学习笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-19T01:22:40+08:00">
+                2017-11-19
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2017-11-30T21:26:50+08:00">
+                2017-11-30
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/19/Matlab-Deep-Learning学习笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2017/11/19/Matlab-Deep-Learning学习笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+             <span id="/2017/11/19/Matlab-Deep-Learning学习笔记/" class="leancloud_visitors" data-flag-title="Matlab Deep Learning学习笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">Visitors&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="http://oofx6tpf6.bkt.clouddn.com/cifar10-fig.jpg" alt=""></p>
+<div class="note "><p>最近对深度学习尤其着迷，是时候用万能的Matlab去践行我的DL学习之路了。之所以用Matlab，是因为Matlab真的太强大了！自从大学开始我就一直用这个神奇的软件，算是最熟悉的编程工具。加上最近mathworks公司一大波大佬的不懈努力，在今年下半年发行的R2017b版本中又加入了诸多新颖的<a href="https://cn.mathworks.com/products/new_products/latest_features.html?s_tid=hp_release_2017b&amp;from=timeline&amp;isappinstalled=0" target="_blank" rel="external">特性</a>，尤其在<a href="https://cn.mathworks.com/solutions/deep-learning.html" target="_blank" rel="external">DL</a>方面，可以发现：仅仅几条简单的代码，就能够实现复杂的功能。基于以上，我在本文列举了几个在Matlab上学习Deep Learning的例子：1. <a href="#example1">手写字符识别</a>；2. <a href="#example2">搭建网络对CIFAR10分类</a>；3.<a href="#example3">搭建一个Resnet</a>。务必保证主机已经安装Matlab 2017a及以上。</p></div>
+<a id="more"></a>
+<h2 id="手写字符识别"><a href="#手写字符识别" class="headerlink" title="手写字符识别"></a><span id="example1">手写字符识别</span></h2><p>利用CNN做数字分类实验。</p>
+<p>接下来的实验会阐明如何进行：</p>
+<ul>
+<li>加载图像数据</li>
+<li>设计网络结构</li>
+<li>设置网络训练参数</li>
+<li>训练网络</li>
+<li>预测新数据的类别</li>
+</ul>
+<h3 id="加载图像数据"><a href="#加载图像数据" class="headerlink" title="加载图像数据"></a>加载图像数据</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">digitDatasetPath = fullfile(matlabroot,<span class="string">'toolbox'</span>,<span class="string">'nnet'</span>,<span class="string">'nndemos'</span>,...</div><div class="line">    <span class="string">'nndatasets'</span>,<span class="string">'DigitDataset'</span>);</div><div class="line"><span class="comment">% imageDatastore函数 能够通过文件夹名自动地把数据存储成ImageDatastore 对象</span></div><div class="line">digitData = imageDatastore(digitDatasetPath,...</div><div class="line">    <span class="string">'IncludeSubfolders'</span>,true,<span class="string">'LabelSource'</span>,<span class="string">'foldernames'</span>);</div><div class="line"></div><div class="line"><span class="comment">% Display some of the images in the datastore.</span></div><div class="line">figure;</div><div class="line">perm = randperm(<span class="number">10000</span>,<span class="number">25</span>);</div><div class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:<span class="number">25</span></div><div class="line">    subplot(<span class="number">5</span>,<span class="number">5</span>,<span class="built_in">i</span>);</div><div class="line">    imshow(digitData.Files&#123;perm(i)&#125;);</div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>以下是手写字符的部分数据：</p>
+<p><img src="http://oofx6tpf6.bkt.clouddn.com/17-11-18/63361958.jpg" alt=""></p>
+<h3 id="创建训练集与验证集"><a href="#创建训练集与验证集" class="headerlink" title="创建训练集与验证集"></a>创建训练集与验证集</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">trainNumFiles = <span class="number">750</span>;</div><div class="line">[trainDigitData,valDigitData] = splitEachLabel(digitData,<span class="number">750</span>,<span class="string">'randomize'</span>); </div><div class="line"><span class="comment">% 每类有1000个，选择其中的750类作为训练集，剩下的作为验证集；此处750可以换成一个比例：75%</span></div></pre></td></tr></table></figure>
+<p>注意Matlab里面支持的<strong>层</strong>的类型，包括：<a href="https://cn.mathworks.com/help/nnet/ref/nnet.cnn.layer.layer.html?searchHighlight=softmaxlayer&amp;s_tid=doc_srchtitle" target="_blank" rel="external">CLICK THIS LINK</a>。如下所示：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Epoch</th>
+<th>Iteration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Layer Type</td>
+<td>Function</td>
+</tr>
+<tr>
+<td>Image input layer</td>
+<td>imageInputLayer</td>
+</tr>
+<tr>
+<td>Sequence input layer</td>
+<td>sequenceInputLayer</td>
+</tr>
+<tr>
+<td>2-D convolutional layer</td>
+<td>convolution2dLayer</td>
+</tr>
+<tr>
+<td>2-D transposed convolutional layer</td>
+<td>transposedConv2dLayer</td>
+</tr>
+<tr>
+<td>Fully connected layer</td>
+<td>fullyConnectedLayer</td>
+</tr>
+<tr>
+<td>Long short-term memory (LSTM) layer</td>
+<td>LSTMLayer</td>
+</tr>
+<tr>
+<td>Rectified linear unit (ReLU) layer</td>
+<td>reluLayer</td>
+</tr>
+<tr>
+<td>Leaky rectified linear unit (ReLU) layer</td>
+<td>leakyReluLayer</td>
+</tr>
+<tr>
+<td>Clipped rectified linear unit (ReLU) layer</td>
+<td>clippedReluLayer</td>
+</tr>
+<tr>
+<td>Batch normalization layer</td>
+<td>batchNormalizationLayer</td>
+</tr>
+<tr>
+<td>Channel-wise local response normalization (LRN) layer</td>
+<td>crossChannelNormalizationLayer</td>
+</tr>
+<tr>
+<td>Dropout layer</td>
+<td>dropoutLayer</td>
+</tr>
+<tr>
+<td>Addition layer</td>
+<td>additionLayer</td>
+</tr>
+<tr>
+<td>Depth concatenation layer</td>
+<td>depthConcatenationLayer</td>
+</tr>
+<tr>
+<td>Average pooling layer</td>
+<td>averagePooling2dLayer</td>
+</tr>
+<tr>
+<td>Max pooling layer</td>
+<td>maxPooling2dLayer</td>
+</tr>
+<tr>
+<td>Max unpooling layer</td>
+<td>maxUnpooling2dLayer</td>
+</tr>
+<tr>
+<td>Softmax layer</td>
+<td>softmaxLayer</td>
+</tr>
+<tr>
+<td>Classification layer</td>
+<td>classificationLayer</td>
+</tr>
+<tr>
+<td>Regression layer</td>
+<td>regressionLayer</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="创建自己的网络结构"><a href="#创建自己的网络结构" class="headerlink" title="创建自己的网络结构"></a>创建自己的网络结构</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">%% Define Network Architecture</span></div><div class="line"><span class="comment">% Define the convolutional neural network architecture.</span></div><div class="line">layers = </div><div class="line">    [</div><div class="line">    imageInputLayer([<span class="number">28</span> <span class="number">28</span> <span class="number">1</span>])</div><div class="line">    convolution2dLayer(<span class="number">3</span>,<span class="number">16</span>,<span class="string">'Padding'</span>,<span class="number">1</span>)</div><div class="line">    batchNormalizationLayer()</div><div class="line">    reluLayer()</div><div class="line">    maxPooling2dLayer(<span class="number">2</span>,<span class="string">'Stride'</span>,<span class="number">2</span>)</div><div class="line">    </div><div class="line">    convolution2dLayer(<span class="number">3</span>,<span class="number">32</span>,<span class="string">'Padding'</span>,<span class="number">1</span>)</div><div class="line">    batchNormalizationLayer()</div><div class="line">    reluLayer()</div><div class="line">    </div><div class="line">    maxPooling2dLayer(<span class="number">2</span>,<span class="string">'Stride'</span>,<span class="number">2</span>)</div><div class="line">    </div><div class="line">    convolution2dLayer(<span class="number">3</span>,<span class="number">64</span>,<span class="string">'Padding'</span>,<span class="number">1</span>)</div><div class="line">    batchNormalizationLayer()</div><div class="line">    reluLayer()</div><div class="line">    </div><div class="line">    fullyConnectedLayer(<span class="number">10</span>)</div><div class="line">    softmaxLayer()</div><div class="line">    classificationLayer()</div><div class="line">    ];</div></pre></td></tr></table></figure>
+<p>以下就是该网络结构及参数设置：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"> <span class="number">1</span>   <span class="string">''</span>   Image Input             <span class="number">28</span>x28x1 images <span class="keyword">with</span> <span class="string">'zerocenter'</span> normalization</div><div class="line"> <span class="number">2</span>   <span class="string">''</span>   Convolution             <span class="number">16</span> <span class="number">3</span>x3 convolutions <span class="keyword">with</span> stride [<span class="number">1</span>  <span class="number">1</span>] and padding [<span class="number">1</span>  <span class="number">1</span>  <span class="number">1</span>  <span class="number">1</span>]</div><div class="line"> <span class="number">3</span>   <span class="string">''</span>   Batch Normalization     Batch normalization</div><div class="line"> <span class="number">4</span>   <span class="string">''</span>   ReLU                    ReLU</div><div class="line"> <span class="number">5</span>   <span class="string">''</span>   Max Pooling             <span class="number">2</span>x2 max pooling <span class="keyword">with</span> stride [<span class="number">2</span>  <span class="number">2</span>] and padding [<span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>]</div><div class="line"> <span class="number">6</span>   <span class="string">''</span>   Convolution             <span class="number">32</span> <span class="number">3</span>x3 convolutions <span class="keyword">with</span> stride [<span class="number">1</span>  <span class="number">1</span>] and padding [<span class="number">1</span>  <span class="number">1</span>  <span class="number">1</span>  <span class="number">1</span>]</div><div class="line"> <span class="number">7</span>   <span class="string">''</span>   Batch Normalization     Batch normalization</div><div class="line"> <span class="number">8</span>   <span class="string">''</span>   ReLU                    ReLU</div><div class="line"> <span class="number">9</span>   <span class="string">''</span>   Max Pooling             <span class="number">2</span>x2 max pooling <span class="keyword">with</span> stride [<span class="number">2</span>  <span class="number">2</span>] and padding [<span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>]</div><div class="line"><span class="number">10</span>   <span class="string">''</span>   Convolution             <span class="number">64</span> <span class="number">3</span>x3 convolutions <span class="keyword">with</span> stride [<span class="number">1</span>  <span class="number">1</span>] and padding [<span class="number">1</span>  <span class="number">1</span>  <span class="number">1</span>  <span class="number">1</span>]</div><div class="line"><span class="number">11</span>   <span class="string">''</span>   Batch Normalization     Batch normalization</div><div class="line"><span class="number">12</span>   <span class="string">''</span>   ReLU                    ReLU</div><div class="line"><span class="number">13</span>   <span class="string">''</span>   Fully Connected         <span class="number">10</span> fully connected layer</div><div class="line"><span class="number">14</span>   <span class="string">''</span>   Softmax                 softmax</div><div class="line"><span class="number">15</span>   <span class="string">''</span>   Classification Output   crossentropyex</div></pre></td></tr></table></figure>
+<h3 id="网络训练参数设计"><a href="#网络训练参数设计" class="headerlink" title="网络训练参数设计"></a>网络训练参数设计</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> options = trainingOptions(<span class="string">'sgdm'</span>,...</div><div class="line"><span class="string">'MaxEpochs'</span>,<span class="number">3</span>, ...                 <span class="comment">% 训练最大轮回</span></div><div class="line"><span class="string">'ValidationData'</span>,valDigitData,...  <span class="comment">% 验证集</span></div><div class="line"><span class="string">'ValidationFrequency'</span>,<span class="number">30</span>,...</div><div class="line"><span class="string">'Verbose'</span>,false,...</div><div class="line"><span class="string">'Plots'</span>,<span class="string">'training-progress'</span>);</div></pre></td></tr></table></figure>
+<h3 id="开始训练"><a href="#开始训练" class="headerlink" title="开始训练"></a>开始训练</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">net = trainNetwork(trainDigitData,layers,options);</div></pre></td></tr></table></figure>
+<h3 id="测试新的数据"><a href="#测试新的数据" class="headerlink" title="测试新的数据"></a>测试新的数据</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">predictedLabels = classify(net,valDigitData);</div><div class="line">valLabels = valDigitData.Labels;</div><div class="line">accuracy = sum(predictedLabels == valLabels)/<span class="built_in">numel</span>(valLabels)</div></pre></td></tr></table></figure>
+<h3 id="查看某层参数"><a href="#查看某层参数" class="headerlink" title="查看某层参数"></a>查看某层参数</h3><p>例如查看第2层的weight参数，输入以下命令：<br><figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">montage(imresize(mat2gray(net.Layers(<span class="number">2</span>).Weights),[<span class="number">128</span> <span class="number">128</span>]));</div><div class="line">set(gcf,<span class="string">'color'</span>,[<span class="number">1</span> <span class="number">1</span> <span class="number">1</span>]); </div><div class="line">frame=getframe(gcf); <span class="comment">% get the frame</span></div><div class="line">image=frame.cdata;</div><div class="line">[image,map]     =  rgb2ind(image,<span class="number">256</span>);  </div><div class="line">imwrite(image,map,<span class="string">'weight-layer2.png'</span>);</div></pre></td></tr></table></figure></p>
+<p>图像如下所示：<br><img src="http://oofx6tpf6.bkt.clouddn.com/weight-layer2.png" alt=""></p>
+<p>再看一下第10层的参数：<br><figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">[~,~,iter,~]=<span class="built_in">size</span>(net.Layers(<span class="number">10</span>).Weights);</div><div class="line">name=<span class="string">'weight.gif'</span>;</div><div class="line">dt=<span class="number">0.4</span>;</div><div class="line"><span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:iter</div><div class="line">	montage(imresize(mat2gray(net.Layers(<span class="number">10</span>).Weights(:,:,<span class="built_in">i</span>,:)),[<span class="number">128</span> <span class="number">128</span>]));</div><div class="line">    set(gcf,<span class="string">'color'</span>,[<span class="number">1</span> <span class="number">1</span> <span class="number">1</span>]); <span class="comment">%变白</span></div><div class="line">	title([<span class="string">'Layer(10), Channel: '</span>,num2str(i)]);</div><div class="line">	axis normal</div><div class="line">	truesize</div><div class="line">	<span class="comment">%Creat GIF</span></div><div class="line">	frame(<span class="built_in">i</span>)=getframe(gcf); <span class="comment">% get the frame</span></div><div class="line">	image=frame(<span class="built_in">i</span>).cdata;</div><div class="line">	[image,map]     =  rgb2ind(image,<span class="number">256</span>);  </div><div class="line">	<span class="keyword">if</span> <span class="built_in">i</span>==<span class="number">1</span></div><div class="line">		 imwrite(image,map,name,<span class="string">'gif'</span>);</div><div class="line">	<span class="keyword">else</span></div><div class="line">		 imwrite(image,map,name,<span class="string">'gif'</span>,<span class="string">'WriteMode'</span>,<span class="string">'append'</span>,<span class="string">'DelayTime'</span>,dt);</div><div class="line">    <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure></p>
+<p><img src="http://oofx6tpf6.bkt.clouddn.com/weight-inf.gif" alt=""></p>
+<h2 id="搭建网络对CIFAR10分类"><a href="#搭建网络对CIFAR10分类" class="headerlink" title="搭建网络对CIFAR10分类"></a><span id="example2">搭建网络对CIFAR10分类</span></h2><p>CIFAR10和CIFAR100是<a href="http://groups.csail.mit.edu/vision/TinyImages/" target="_blank" rel="external">80 million tiny images</a>的子集，是由Geoffrey Hinton的弟子们Alex Krizhevsky和Vinod Nair共同采集。</p>
+<h3 id="CIFAR10"><a href="#CIFAR10" class="headerlink" title="CIFAR10"></a><a href="http://www.cs.toronto.edu/~kriz/cifar.html" target="_blank" rel="external">CIFAR10</a></h3><p>CIFAR10由60000张32*32的彩色图像组成，一种分成10类，平均每类图像6000张。共有50000张训练图像，10000张测试图像。这个数据集被分成了5个分支，其中每个分支10000张。测试集包含每类中随机选择的1000张图像。训练集就是剩下的那些图像。<br>对于每个分支的数据的大小是：10000*3072；其中3072=32*32*3。数据以行优先的顺序存储，所以前1024个数据是r通道的数据，接下来的1024个数据是g通道的数据，最后1024个数据是b通道的。<br>假如原始的数据是data，我们想要将其重新排列成我们需要的数据。首先对其进行转置，然后再用reshape函数对图像重组（可选：最后将图像前两维互换（转置），之所以这么做，可以更好的可视化）。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">XBatch = data';</div><div class="line">XBatch = <span class="built_in">reshape</span>(XBatch, <span class="number">32</span>,<span class="number">32</span>,<span class="number">3</span>,[]);</div><div class="line">XBatch = <span class="built_in">permute</span>(XBatch, [<span class="number">2</span> <span class="number">1</span> <span class="number">3</span> <span class="number">4</span>]);</div></pre></td></tr></table></figure>
+<p>以下是cifar10的部分数据。<br><img src="http://oofx6tpf6.bkt.clouddn.com/cifar10-images.png" alt=""><br>共有10类，包括：airplane，automobile，bird，cat，deer，dog，frog，horse，ship，truck。</p>
+<h3 id="Just-run-it"><a href="#Just-run-it" class="headerlink" title="Just run it"></a>Just run it</h3><p>接下来我们就开始运行以下代码，来训练我们的网络。闲话少说，我把代码放在了<a href="https://github.com/Vincentqyw/DeepLearning/blob/master/demo_cifar10.m" target="_blank" rel="external">Github</a>，欢迎$star$。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span>   <span class="string">'imageinput'</span>    Image Input         	<span class="number">28</span>x28x1 images <span class="keyword">with</span> <span class="string">'zerocenter'</span> normalization</div><div class="line"><span class="number">2</span>   <span class="string">'conv_1'</span>        Convolution         	<span class="number">16</span> <span class="number">3</span>x3x1 convolutions <span class="keyword">with</span> stride [<span class="number">1</span>  <span class="number">1</span>] and padding [<span class="number">1</span>  <span class="number">1</span>  <span class="number">1</span>  <span class="number">1</span>]</div><div class="line"><span class="number">3</span>   <span class="string">'batchnorm_1'</span>   Batch Normalization 	Batch normalization <span class="keyword">with</span> <span class="number">16</span> channels</div><div class="line"><span class="number">4</span>   <span class="string">'relu_1'</span>        ReLU               		ReLU</div><div class="line"><span class="number">5</span>   <span class="string">'maxpool_1'</span>     Max Pooling         	<span class="number">2</span>x2 max pooling <span class="keyword">with</span> stride [<span class="number">2</span>  <span class="number">2</span>] and padding [<span class="number">0</span> <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>]</div><div class="line"><span class="number">6</span>   <span class="string">'conv_2'</span>        Convolution         	<span class="number">32</span> <span class="number">3</span>x3x16 convolutions <span class="keyword">with</span> stride [<span class="number">1</span>  <span class="number">1</span>] and padding [<span class="number">1</span>  <span class="number">1</span>  <span class="number">1</span>  <span class="number">1</span>]</div><div class="line"><span class="number">7</span>   <span class="string">'batchnorm_2'</span>   Batch Normalization 	Batch normalization <span class="keyword">with</span> <span class="number">32</span> channels</div><div class="line"><span class="number">8</span>   <span class="string">'relu_2'</span>        ReLU                	ReLU</div><div class="line"><span class="number">9</span>   <span class="string">'maxpool_2'</span>     Max Pooling         	<span class="number">2</span>x2 max pooling <span class="keyword">with</span> stride [<span class="number">2</span>  <span class="number">2</span>] and padding [<span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span> <span class="number">0</span>]</div><div class="line"><span class="number">10</span>   <span class="string">'conv_3'</span>       Convolution         	<span class="number">64</span> <span class="number">3</span>x3x32 convolutions <span class="keyword">with</span> stride [<span class="number">1</span>  <span class="number">1</span>] and padding [<span class="number">1</span> <span class="number">1</span>  <span class="number">1</span>  <span class="number">1</span>]</div><div class="line"><span class="number">11</span>   <span class="string">'batchnorm_3'</span>  Batch Normalization 	Batch normalization <span class="keyword">with</span> <span class="number">64</span> channels</div><div class="line"><span class="number">12</span>   <span class="string">'relu_3'</span>       ReLU			ReLU</div><div class="line"><span class="number">13</span>   <span class="string">'fc'</span>           Fully Connected		<span class="number">10</span> fully connected layer</div><div class="line"><span class="number">14</span>   <span class="string">'softmax'</span>      Softmax			softmax</div><div class="line"><span class="number">15</span>   <span class="string">'classoutput'</span>  Classification Output	crossentropyex <span class="keyword">with</span> <span class="string">'0'</span>, <span class="string">'1'</span>, and <span class="number">8</span> other classes</div></pre></td></tr></table></figure>
+<p>以下是训练过程输出：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Epoch</th>
+<th>Iteration</th>
+<th style="text-align:center">Time Elapsed (seconds)</th>
+<th style="text-align:center">Mini-batch Loss</th>
+<th style="text-align:center">Mini-batch Accuracy</th>
+<th style="text-align:center">Base Learning Rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td style="text-align:center">0.06</td>
+<td style="text-align:center">2.3026</td>
+<td style="text-align:center">8.59%</td>
+<td style="text-align:center">0.0020</td>
+</tr>
+<tr>
+<td>1</td>
+<td>50</td>
+<td style="text-align:center">1.27</td>
+<td style="text-align:center">2.3026</td>
+<td style="text-align:center">14.06%</td>
+<td style="text-align:center">0.0020</td>
+</tr>
+<tr>
+<td>1</td>
+<td>100</td>
+<td style="text-align:center">2.52</td>
+<td style="text-align:center">2.3024</td>
+<td style="text-align:center">7.81%</td>
+<td style="text-align:center">0.0020</td>
+</tr>
+<tr>
+<td>1</td>
+<td>150</td>
+<td style="text-align:center">3.73</td>
+<td style="text-align:center">2.2999</td>
+<td style="text-align:center">20.31%</td>
+<td style="text-align:center">0.0020</td>
+</tr>
+<tr>
+<td>1</td>
+<td>200</td>
+<td style="text-align:center">5.01</td>
+<td style="text-align:center">2.2740</td>
+<td style="text-align:center">15.63%</td>
+<td style="text-align:center">0.0020</td>
+</tr>
+<tr>
+<td>1</td>
+<td>250</td>
+<td style="text-align:center">6.28</td>
+<td style="text-align:center">2.1194</td>
+<td style="text-align:center">21.09%</td>
+<td style="text-align:center">0.0020</td>
+</tr>
+<tr>
+<td>1</td>
+<td>300</td>
+<td style="text-align:center">7.58</td>
+<td style="text-align:center">1.9100</td>
+<td style="text-align:center">23.44%</td>
+<td style="text-align:center">0.0020</td>
+</tr>
+<tr>
+<td>1</td>
+<td>350</td>
+<td style="text-align:center">8.86</td>
+<td style="text-align:center">1.8892</td>
+<td style="text-align:center">28.13%</td>
+<td style="text-align:center">0.0020</td>
+</tr>
+<tr>
+<td>2</td>
+<td>400</td>
+<td style="text-align:center">10.08</td>
+<td style="text-align:center">1.7490</td>
+<td style="text-align:center">29.69%</td>
+<td style="text-align:center">0.0020</td>
+</tr>
+<tr>
+<td>2</td>
+<td>450</td>
+<td style="text-align:center">11.32</td>
+<td style="text-align:center">1.8377</td>
+<td style="text-align:center">31.25%</td>
+<td style="text-align:center">0.0020</td>
+</tr>
+<tr>
+<td>2</td>
+<td>500</td>
+<td style="text-align:center">12.57</td>
+<td style="text-align:center">1.6073</td>
+<td style="text-align:center">39.84%</td>
+<td style="text-align:center">0.0020</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td style="text-align:center">…</td>
+<td style="text-align:center">…</td>
+<td style="text-align:center">…</td>
+<td style="text-align:center">…</td>
+</tr>
+<tr>
+<td>20</td>
+<td>7650</td>
+<td style="text-align:center">407.74</td>
+<td style="text-align:center">0.2858</td>
+<td style="text-align:center">93.75%</td>
+<td style="text-align:center">2.00e-05</td>
+</tr>
+<tr>
+<td>20</td>
+<td>7700</td>
+<td style="text-align:center">409.06</td>
+<td style="text-align:center">0.3127</td>
+<td style="text-align:center">89.84%</td>
+<td style="text-align:center">2.00e-05</td>
+</tr>
+<tr>
+<td>20</td>
+<td>7750</td>
+<td style="text-align:center">410.38</td>
+<td style="text-align:center">0.3254</td>
+<td style="text-align:center">87.50%</td>
+<td style="text-align:center">2.00e-05</td>
+</tr>
+<tr>
+<td>20</td>
+<td>7800</td>
+<td style="text-align:center">411.64</td>
+<td style="text-align:center">0.2456</td>
+<td style="text-align:center">92.19%</td>
+<td style="text-align:center">2.00e-05</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>最后测试我们的模型的性能，accuracy=76%左右。但是训练时，我们的batch-accuracy已经达到了90%以上，说明我们的<strong>模型过拟合</strong>了。显然这不是我们想要的结果，进一步的调参将会在此补充。</p>
+<h3 id="可视化某层的参数"><a href="#可视化某层的参数" class="headerlink" title="可视化某层的参数"></a>可视化某层的参数</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">% Extract the first convolutional layer weights</span></div><div class="line">w = cifar10Net.Layers(<span class="number">2</span>).Weights;</div><div class="line"></div><div class="line"><span class="comment">% rescale and resize the weights for better visualization</span></div><div class="line">w = mat2gray(w);</div><div class="line">w = imresize(w, [<span class="number">100</span> <span class="number">100</span>]);</div><div class="line"></div><div class="line">figure</div><div class="line">montage(w)</div><div class="line">name=<span class="string">'cifar10-weight-layer2'</span>;</div><div class="line">set(gcf,<span class="string">'color'</span>,[<span class="number">1</span> <span class="number">1</span> <span class="number">1</span>]);</div><div class="line">frame=getframe(gcf); <span class="comment">% get the frame</span></div><div class="line">image=frame.cdata;</div><div class="line">[image,map]     =  rgb2ind(image,<span class="number">256</span>);  </div><div class="line">imwrite(image,map,[name,<span class="string">'.png'</span>]);</div></pre></td></tr></table></figure>
+<p><img src="http://oofx6tpf6.bkt.clouddn.com/cifar10-weight-layer2.png" alt=""></p>
+<h2 id="搭建一个Resnet"><a href="#搭建一个Resnet" class="headerlink" title="搭建一个Resnet"></a><span id="example3">搭建一个Resnet</span></h2><p>接下来，为了验证下这个DL工具包的强大之处，我打算纯手工建一个Resnet。为方便起见，我搭了一个Resnet34（更深的网络敬请期待吧）。这里是它的<a href="./resnet34.prototxt">prototxt</a>，我们可以用<a href="http://ethereon.github.io/netscope/#/editor" target="_blank" rel="external">网络可视化工具</a>进行查看resnet34的结构。以下是Resnet34的一部分（太长了没有截下全部视图）。<br><img src="http://oofx6tpf6.bkt.clouddn.com/resnet34.png" alt=""></p>
+<h3 id="定义每一层与连接层"><a href="#定义每一层与连接层" class="headerlink" title="定义每一层与连接层"></a>定义每一层与连接层</h3><p>以从pool1到res2a为例子建立网络。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">layers_example=[</div><div class="line">    % pool1 - res2a</div><div class="line">    maxPooling2dLayer(<span class="number">3</span>, <span class="string">'Stride'</span>, <span class="number">2</span>,<span class="string">'Name'</span>,<span class="string">'pool1'</span>);</div><div class="line">    %  branch2a </div><div class="line">    convolution2dLayer(<span class="number">3</span>,<span class="number">64</span>,<span class="string">'Stride'</span>, <span class="number">1</span>,<span class="string">'Padding'</span>, <span class="number">1</span>,<span class="string">'Name'</span>,<span class="string">'res2a_branch2a'</span>)</div><div class="line">    batchNormalizationLayer(<span class="string">'Name'</span>,<span class="string">'bn2a_branch2a'</span>)</div><div class="line">    reluLayer(<span class="string">'Name'</span>,<span class="string">'res2a_branch2a_relu'</span>)</div><div class="line"></div><div class="line">    %  branch2b</div><div class="line">    convolution2dLayer(<span class="number">3</span>,<span class="number">64</span>,<span class="string">'Stride'</span>, <span class="number">1</span>,<span class="string">'Padding'</span>, <span class="number">1</span>,<span class="string">'Name'</span>,<span class="string">'res2a_branch2b'</span>)</div><div class="line">    batchNormalizationLayer(<span class="string">'Name'</span>,<span class="string">'bn2a_branch2b'</span>)</div><div class="line"></div><div class="line">    % add together</div><div class="line">    additionLayer(<span class="number">2</span>,<span class="string">'Name'</span>,<span class="string">'res2a'</span>)</div><div class="line">    reluLayer(<span class="string">'Name'</span>,<span class="string">'res2a_relu'</span>)</div><div class="line">];</div></pre></td></tr></table></figure>
+<p>上述过程仅仅完成了网络的一个小分支，记下来要完成<code>res2a_branch1</code>这部分的连接。这时候要用到<strong>DAG</strong>的<a href="https://cn.mathworks.com/help/nnet/ref/dagnetwork.html" target="_blank" rel="external">一些方法</a>。通过添加新层同时建立新的连接即可，方式如下。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">lgraph = layerGraph(layers_example);</div><div class="line">figure</div><div class="line">plot(lgraph)</div><div class="line"></div><div class="line"><span class="comment">%% add some connections (shortcut)</span></div><div class="line">layers_2a=[</div><div class="line">    convolution2dLayer(<span class="number">1</span>,<span class="number">64</span>,<span class="string">'Stride'</span>, <span class="number">1</span>,<span class="string">'Padding'</span>, <span class="number">0</span>,<span class="string">'Name'</span>,<span class="string">'res2a_branch1'</span>)</div><div class="line">    batchNormalizationLayer(<span class="string">'Name'</span>,<span class="string">'bn2a_branch1'</span>)</div><div class="line">];</div><div class="line">lgraph = addLayers(lgraph,layers_2a);</div><div class="line">lgraph = connectLayers(lgraph,<span class="string">'pool1'</span>,<span class="string">'res2a_branch1'</span>);</div><div class="line">lgraph = connectLayers(lgraph,<span class="string">'bn2a_branch1'</span>,<span class="string">'res2a/in2'</span>);</div><div class="line"><span class="comment">% show net</span></div><div class="line">plot(lgraph)</div></pre></td></tr></table></figure>
+<p>其他部分的构建同上，经过一系列重复的工作，我们可以构建出这个不太深的Resnet34，全部代码见我的<a href="https://github.com/Vincentqyw/DeepLearning" target="_blank" rel="external">Github</a>。</p>
+<h2 id="一些基本问题"><a href="#一些基本问题" class="headerlink" title="一些基本问题"></a>一些基本问题</h2><ul>
+<li>参数的基本格式</li>
+</ul>
+<script type="math/tex; mode=display">Height \times Width \times (\#Channels) \times (\#Filters)</script><ul>
+<li>SGD是什么？<br>可以参见好友写的一篇<a href="https://sttomato.github.io/2017/08/13/%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/#随机梯度下降" target="_blank" rel="external">博文</a>。</li>
+<li>什么是epoch？<br>模型训练的时候一般采用stochastic gradient descent（SGD），一次迭代选取一个batch进行update。一个epoch的意思就是迭代次数*batch的数目 和训练数据的个数一样，就是一个epoch。</li>
+<li>为什么要是用BN？<br>Batch normalization layers normalize the activations and gradients propagating through a network, making network training an easier optimization problem. Use batch normalization layers between convolutional layers and nonlinearities, such as ReLU layers, to speed up network training and reduce the sensitivity to network initialization.</li>
+<li>RELU的作用？<br><em>Max-Pooling Layer</em> Convolutional layers (with activation functions) are sometimes followed by a down-sampling operation that reduces the spatial size of the feature map and removes redundant spatial information. Down-sampling makes it possible to increase the number of filters in deeper convolutional layers without increasing the required amount of computation per layer. One way of down-sampling is using a max pooling. The max pooling layer returns the maximum values of rectangular regions of inputs.</li>
+<li><p><em>add more</em></p>
+</li>
+<li><p>Resnet中scale层是如何定义的？有什么用途？ </p>
+</li>
+<li><p>Resnet中为何残差$F(x)$比$H(x)$好学？ </p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechat_pay.png" alt="Vincent Qin WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/ali_pay.png" alt="Vincent Qin Alipay"/>
+        <p>Alipay</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    Vincent Qin
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="https://www.vincentqin.tech/2017/11/19/Matlab-Deep-Learning学习笔记/" title="Matlab Deep Learning学习笔记">https://www.vincentqin.tech/2017/11/19/Matlab-Deep-Learning学习笔记/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/CNN/" rel="tag"><i class="fa fa-star"></i> CNN</a>
+          
+            <a href="/tags/CIFAR10/" rel="tag"><i class="fa fa-star"></i> CIFAR10</a>
+          
+            <a href="/tags/Deep-Learning/" rel="tag"><i class="fa fa-star"></i> Deep Learning</a>
+          
+            <a href="/tags/Matlab/" rel="tag"><i class="fa fa-star"></i> Matlab</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/06/深度学习在深度(视差)估计中的应用/" rel="next" title="深度学习在深度(视差)估计中的应用">
+                <i class="fa fa-chevron-left"></i> 深度学习在深度(视差)估计中的应用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/07/CNN框架-CNN-Architectures/" rel="prev" title="CNN框架(CNN Architectures)">
+                CNN框架(CNN Architectures) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+    
+      
+          <div onclick="showGitalk();" id="gitalk_title" class="gitalk_title">Click Gitalk Comments</div>
+      
+      <div id="gitalk_container" style="display:none;"></div>
+    
+  
+    <div class="comments" id="comments">
+    </div>
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/qin.png"
+                alt="Vincent Qin" />
+            
+              <p class="site-author-name" itemprop="name">Vincent Qin</p>
+              <p class="site-description motion-element" itemprop="description">I like eat Tomato omelette=。=</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/Vincentqyw" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:qin123yw@163.com" target="_blank" title="Email">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>Email</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://coding.net/vincentqin" target="_blank" title="Coding">
+                    
+                      <i class="fa fa-fw fa-code"></i>Coding</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/273224402" target="_blank" title="Weibo">
+                    
+                      <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-battery-1"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://theme-next.iissnan.com/faqs.html" title="Hexo" target="_blank">Hexo</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://fontawesome.io/icons/" title="FontAwesome" target="_blank">FontAwesome</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#手写字符识别"><span class="nav-number">1.</span> <span class="nav-text">手写字符识别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加载图像数据"><span class="nav-number">1.1.</span> <span class="nav-text">加载图像数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建训练集与验证集"><span class="nav-number">1.2.</span> <span class="nav-text">创建训练集与验证集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建自己的网络结构"><span class="nav-number">1.3.</span> <span class="nav-text">创建自己的网络结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络训练参数设计"><span class="nav-number">1.4.</span> <span class="nav-text">网络训练参数设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开始训练"><span class="nav-number">1.5.</span> <span class="nav-text">开始训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试新的数据"><span class="nav-number">1.6.</span> <span class="nav-text">测试新的数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看某层参数"><span class="nav-number">1.7.</span> <span class="nav-text">查看某层参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建网络对CIFAR10分类"><span class="nav-number">2.</span> <span class="nav-text">搭建网络对CIFAR10分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CIFAR10"><span class="nav-number">2.1.</span> <span class="nav-text">CIFAR10</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Just-run-it"><span class="nav-number">2.2.</span> <span class="nav-text">Just run it</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可视化某层的参数"><span class="nav-number">2.3.</span> <span class="nav-text">可视化某层的参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建一个Resnet"><span class="nav-number">3.</span> <span class="nav-text">搭建一个Resnet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义每一层与连接层"><span class="nav-number">3.1.</span> <span class="nav-text">定义每一层与连接层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些基本问题"><span class="nav-number">4.</span> <span class="nav-text">一些基本问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2016 &mdash; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Vincent Qin</span>
+  <span class="post-meta-divider">|</span>
+
+  <style>
+	coding:link {color:#999999; } 
+	coding:visited {color:#999999;text-decoration:none;} 
+	coding:active {color:#999999;text-decoration:none;} 
+  </style>  
+  <span>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i  class="fa fa-user"></i> 官人是第
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      位访客
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站总访问数
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      人次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+      <div id="needsharebutton-float">
+        <span class="btn">
+          <i class="fa fa-share-alt" aria-hidden="true"></i>
+        </span>
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.3"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+
+    <script type="text/javascript">
+    var GUEST = ['nick','mail','link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item=>{
+      return GUEST.indexOf(item)>-1;
+    });
+    new Valine({
+        el: '#comments' ,
+        lang:'en',
+        verify: false,
+        notify: true,
+        appId: 'gW2gPJn72UA5SIcq03J1SD94-gzGzoHsz',
+        appKey: 'qRCCImMfpduRBJN8FRj8pJF4',
+        placeholder: 'Just go go',
+        avatar:'retro',
+        guest_info:guest,
+        pageSize:'10' || 10,
+    });
+  </script>
+
+
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+  <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+  <script>
+    function showGitalk(){
+        $("#gitalk_title").attr("style","display:none");
+        $("#gitalk_container").attr("style","").addClass("gitalk_container");
+
+        var gitalk = new Gitalk({
+            id: window.location.pathname,
+            clientID: 'fbf87ffe2080934209fc',
+            clientSecret: '23048ae0f682b6e34844f41d2b84d171bb7b2854',
+            repo: 'gitalk',
+            owner: 'Vincentqyw',
+            admin: ['Vincentqyw'],
+            distractionFreeMode: true,
+            body: location.href
+        });
+
+        gitalk.render('gitalk_container');
+    }
+
+    
+
+  </script>
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("RQs4FrsjFMNDD6sbzzHlN3ei-gzGzoHsz", "LQziYhODk8GWxR5yDnx4IT0Q");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+  
+  
+  <link rel="stylesheet" href="/lib/needsharebutton/needsharebutton.css">
+
+  
+  
+  <script src="/lib/needsharebutton/needsharebutton.js"></script>
+
+  <script>
+    
+    
+      flOptions = {};
+      
+          flOptions.iconStyle = "box";
+      
+          flOptions.boxForm = "horizontal";
+      
+          flOptions.position = "middleRight";
+      
+          flOptions.networks = "Weibo,Wechat,Douban,QQZone,Twitter,Facebook";
+      
+      new needShareButton('#needsharebutton-float', flOptions);
+    
+  </script>
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+  
+  
+
+  <!--������ƭ-->
+  <script type="text/javascript" src="/js/src/breakdown.js"></script>
+
+  <!-- ҳ������С���� -->
+  <script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>
