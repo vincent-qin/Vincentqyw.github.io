@@ -1133,7 +1133,7 @@ pre .javascript .function {
   }
 }
 .back-to-top.back-to-top-on {
-  bottom: 30px;
+  bottom: 45px;
 }
 .header {
   background: #fff;
@@ -2011,7 +2011,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #d4ebb8;
+  background: #fc39d1;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3781,6 +3781,11 @@ p#div-border-top-purple {
   color: #222;
   font-weight: bold;
   text-align: center;
+}
+.gitter-open-chat-button {
+  right: 20px;
+  padding: 10px;
+  background-color: #777;
 }
 @-moz-keyframes pace-spinner {
   0% {
